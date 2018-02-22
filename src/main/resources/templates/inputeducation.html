@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="www.thymeleaf.org"
+      xmlns:sec="http://www.tymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <title>Input Education</title>
+    <th:block th:replace="/template :: headstuff"></th:block>
+</head>
+<body>
+<div th:replace="/template::navbarfragement">
+</div>
+
+<div class="container-fluid">
+    <h2>Education</h2><br />
+    <div sec:authorize="hasAuthority('APPLICANT')" class="container">
+    <h3>Input</h3>
+        <form action="#"
+          th:action="@{/processeducation}"
+          th:object="${addeducation}"
+          method="post">
+        <input type="hidden" th:field="*{id}" />
+        <div class="form-group row">
+            <label for="inputDegreesubject" class="col-sm-2 col-form-label">Degree Subject :</label>
+            <div class="col-sm-5">
+                <input type="text" class="form-control" id="inputDegreesubject" th:field="*{degreesubject}" placeholder="Degree Subject" />
+                <small class="form-text text-muted">Required</small>
+                <span th:if="${#fields.hasErrors('degreesubject')}"
+                      th:errors="*{degreesubject}" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="inputDegreetype" class="col-sm-2 col-form-label">Degree Type :</label>
+            <div class="col-sm-5">
+                <input type="text" class="form-control" id="inputDegreetype" th:field="*{degreetype}" placeholder="Degree Type" />
+                <small class="form-text text-muted">Required</small>
+                <span th:if="${#fields.hasErrors('degreetype')}"
+                      th:errors="*{degreetype}" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="inputSchoolplace" class="col-sm-2 col-form-label">School :</label>
+            <div class="col-sm-5">
+                <input type="text" class="form-control" id="inputSchoolplace" th:field="*{schoolplace}" placeholder="Institution" />
+                <small class="form-text text-muted">Required</small>
+                <span th:if="${#fields.hasErrors('schoolplace')}"
+                      th:errors="*{schoolplace}" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="inputDegreeyear" class="col-sm-2 col-form-label">Date Graduated :</label>
+            <div class="col-sm-5">
+                <input type="text" class="form-control" id="inputDegreeyear" th:field="*{degreeyear}" placeholder="Date of Graduation"/>
+                <small class="form-text text-muted">Required</small>
+                <span th:if="${#fields.hasErrors('degreeyear')}"
+                      th:errors="*{degreeyear}"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-10">
+                <button type="submit" class="btn btn-primary">Add Education</button>
+            </div>
+        </div>
+    </form>
+    </div>
+    <div>
+        <div class="row" th:each="educationResume : ${education}">
+            <div class="col-sm-2">
+                <span th:text="${educationResume.degreetype}"></span> in
+                <span th:text="${educationResume.degreesubject}"></span>,<br />
+                <span th:text="${educationResume.schoolplace}"></span>,
+                <span th:text="${educationResume.degreeyear}"></span><br />
+                <a type="button" th:href="@{/updateeducation/{id}(id=${educationResume.id})}" class="btn btn-dark" role="button">Update</a>
+                <a type="button" th:href="@{/deleteeducation/{id}(id=${educationResume.id})}" class="btn btn-dark" role="button">Delete</a><br /><br />
+            </div>
+            <div class="col-sm-10"></div>
+        </div>
+    </div>
+</div>
+<th:block th:replace="/template :: jslinks"></th:block>
+</body>
+</html>

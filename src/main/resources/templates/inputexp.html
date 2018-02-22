@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="www.thymeleaf.org"
+      xmlns:sec="http://www.tymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <title>Input Experience</title>
+    <th:block th:replace="/template :: headstuff"></th:block>
+</head>
+<body>
+<div th:replace="/template::navbarfragement">
+</div>
+<div class="container-fluid">
+    <h2>Work History</h2> <br />
+    <div sec:authorize="hasAuthority('APPLICANT')" class="container">
+    <h3>Input</h3>
+        <form action="#"
+          th:action="@{/processexp}"
+          th:object="${addexp}"
+          method="post">
+        <input type="hidden" th:field="*{id}" />
+        <div class="form-group row">
+            <label for="inputJobtitle" class="col-sm-2 col-form-label">Job Title :</label>
+            <div class="col-sm-5">
+                <input type="text" class="form-control" id="inputJobtitle" th:field="*{jobtitle}" placeholder="Job Title" />
+                <small class="form-text text-muted">Required</small>
+                <span th:if="${#fields.hasErrors('jobtitle')}"
+                      th:errors="*{jobtitle}" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="inputEmployer" class="col-sm-2 col-form-label">Company :</label>
+            <div class="col-sm-5">
+                <input type="text" class="form-control" id="inputEmployer" th:field="*{employer}" placeholder="Company" />
+                <small class="form-text text-muted">Required</small>
+                <span th:if="${#fields.hasErrors('employer')}"
+                      th:errors="*{employer}" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="inputYearsstart" class="col-sm-2 col-form-label">Date Started :</label>
+            <div class="col-sm-5">
+                <input type="text" class="form-control" id="inputYearsstart" th:field="*{yearsstart}" placeholder="Date Started" />
+                <small class="form-text text-muted">Required</small>
+                <span th:if="${#fields.hasErrors('yearsstart')}"
+                      th:errors="*{yearsstart}" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="inputYearsend" class="col-sm-2 col-form-label">Date Ended :</label>
+            <div class="col-sm-5">
+                <input type="text" class="form-control" id="inputYearsend" th:field="*{yearsend}" placeholder="Date Ended"/>
+                <small class="form-text text-muted">Required</small>
+                <span th:if="${#fields.hasErrors('yearsend')}"
+                      th:errors="*{yearsend}"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="inputDuties" class="col-sm-2 col-form-label">Duties :</label>
+            <div class="col-sm-5">
+                <textarea class="form-control" rows="5" id="inputDuties" th:field="*{duties}" placeholder="Duties"></textarea>
+                <small class="form-text text-muted">Required</small>
+                <span th:if="${#fields.hasErrors('duties')}"
+                      th:errors="*{duties}"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-10">
+                <button type="submit" class="btn btn-primary">Add Experience</button>
+            </div>
+        </div>
+    </form>
+    </div>
+    <div>
+        <div class="row" th:each="expResume : ${experience}">
+            <div class="col-sm-2">
+                <span th:text="${expResume.jobtitle}"></span><br />
+                <span th:text="${expResume.employer}"></span>,
+                <span th:text="${expResume.yearsstart}"></span> -
+                <span th:text="${expResume.yearsend}"></span><br />
+                Duties: <span th:text="${expResume.duties}"></span><br />
+                <a type="button" th:href="@{/updateexp/{id}(id=${expResume.id})}" class="btn btn-dark" role="button">Update</a><br />
+                <a type="button" th:href="@{/deleteexp/{id}(id=${expResume.id})}" class="btn btn-dark" role="button">Delete</a><br /><br />
+            </div>
+            <div class="col-sm-10"></div>
+        </div>
+    </div>
+</div>
+<th:block th:replace="/template :: jslinks"></th:block>
+</body>
+</html>

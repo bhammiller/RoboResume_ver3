@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="www.thymeleaf.org"
+      xmlns:sec="http://www.tymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <title>Registration</title>
+    <th:block th:replace="/template :: headstuff"></th:block>
+</head>
+<body>
+<div th:replace="/template::navbarfragement">
+</div>
+<div class="container-fluid">
+    <h4>New User Registration</h4>
+    <form autocomplete="off" action="#" th:action="@{/register}"
+          th:object="${newUser}" method="post">
+        First Name <mark><strong>
+        <span th:if="${#fields.hasErrors('firstName')}"
+              th:errors="*{firstName}">First Name Error</span>
+    </strong></mark>
+        <input type="text" id="firstName" placeholder="First Name"
+               th:field="*{firstName}" /><br />
+
+        Last Name <mark><strong>
+        <span th:if="${#fields.hasErrors('lastName')}"
+              th:errors="*{lastName}">Last Name Error</span>
+    </strong></mark>
+        <input type="text" id="lastName" placeholder="Last Name"
+               th:field="*{lastName}" /><br />
+
+        Email <mark><strong>
+        <span th:if="${#fields.hasErrors('email')}"
+              th:errors="*{email}">Email Error</span>
+    </strong></mark>
+        <input type="text" id="email" placeholder="Email"
+               th:field="*{email}" /><br />
+
+        Username <mark><strong>
+        <span th:if="${#fields.hasErrors('appUsername')}"
+              th:errors="*{appUsername}">Username Error</span>
+    </strong></mark>
+        <input type="text" id="username" placeholder="Username"
+               th:field="*{appUsername}" /><br />
+
+        Password <mark><strong>
+        <span th:if="${#fields.hasErrors('appPassword')}"
+              th:errors="*{appPassword}">Password Error</span>
+    </strong></mark>
+        <input type="text" id="password" placeholder="Password"
+               th:field="*{appPassword}" /><br />
+        <button type="submit" value="Register" class="btn btn-default">Submit</button>
+    </form>
+</div>
+
+
+
+
+<th:block th:replace="template::jslinks"></th:block>
+</body>
+</html>

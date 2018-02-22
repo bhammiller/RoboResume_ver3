@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="www.thymeleaf.org"
+      xmlns:sec="http://www.tymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <title>Input skills</title>
+    <th:block th:replace="/template :: headstuff"></th:block>
+</head>
+<body>
+<div th:replace="/template::navbarfragement">
+</div>
+
+<div class="container-fluid">
+    <h2>Skills</h2><br />
+    <div sec:authorize="hasAuthority('APPLICANT')" class="container">
+    <h3>Input</h3>
+    <form action="#"
+          th:action="@{/processskill}"
+          th:object="${addskill}"
+          method="post">
+        <input type="hidden" th:field="*{id}" />
+        <div class="form-group row">
+            <label for="inputSkill" class="col-sm-2 col-form-label">Skill </label>
+            <div class="col-sm-5">
+                <input type="text" class="form-control" id="inputSkill" th:field="*{particularskill}" placeholder="Skill" />
+                <small class="form-text text-muted">Required</small>
+                <span th:if="${#fields.hasErrors('particularskill')}"
+                      th:errors="*{particularskill}" class="text-danger"></span>
+            </div>
+        </div>
+        <h3>Skill level</h3>
+        <div class="radio">
+            <label><input type="radio" th:field="*{skilllevel}" value="Begineer" name="optradio"/>Begineer</label>
+        </div>
+        <div class="radio">
+            <label><input type="radio" th:field="*{skilllevel}" value="Intermediate" name="optradio"/>Intermediate</label>
+        </div>
+        <div class="radio ">
+            <label><input type="radio" th:field="*{skilllevel}" value="Proficicient" name="optradio" />Proficient</label>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-10">
+                <button type="submit" class="btn btn-primary">Add Skill</button>
+            </div>
+        </div>
+
+    </form>
+    </div>
+    <div>
+        <div class="row" th:each="skillsResume : ${skills}">
+            <div class="col-sm-2">
+                <span th:text="${skillsResume.particularskill}"></span>,
+                <span th:text="${skillsResume.skilllevel}"></span><br />
+                <a type="button" th:href="@{/updateskill/{id}(id=${skillsResume.id})}" class="btn btn-dark" role="button">Update</a><br />
+                <a type="button" th:href="@{/deleteskill/{id}(id=${skillsResume.id})}" class="btn btn-dark" role="button">Delete</a><br /><br />
+            </div>
+            <div class="col-sm-10"></div>
+        </div>
+    </div>
+</div>
+<th:block th:replace="/template :: jslinks"></th:block>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="www.thymeleaf.org"
+      xmlns:sec="http://www.tymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <title>Cover Letter</title>
+    <th:block th:replace="/template :: headstuff"></th:block>
+</head>
+<body>
+<div th:replace="/template::navbarfragement">
+</div>
+<div class="container-fluid">
+    <h2>Cover Letter</h2> <br />
+    <div sec:authorize="hasAuthority('APPLICANT')" class="container">
+    <h3>Input</h3>
+        <form action="#"
+          th:action="@{/processcover}"
+          th:object="${addcover}"
+          method="post">
+        <input type="hidden" th:field="*{id}" />
+        <div class="form-group row">
+            <label for="inputCoverletter" class="col-sm-2 col-form-label">Cover Letter :</label>
+            <div class="col-sm-5">
+                <textarea class="form-control" rows="5" id="inputCoverletter" th:field="*{coverletter}" placeholder="Cover Letter"></textarea>
+                <small class="form-text text-muted">Required</small>
+                <span th:if="${#fields.hasErrors('coverletter')}"
+                      th:errors="*{coverletter}"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-10">
+                <button type="submit" class="btn btn-primary">Add Reference</button>
+            </div>
+        </div>
+    </form>
+    </div>
+    <div class="container">
+        <div class="row" th:each="wholeResume : ${whole}">
+            <div class="col-sm-2">
+                <span th:text="${wholeResume.coverletter}"></span><br />
+                <a type="button" th:href="@{/updatecover/{id}(id=${wholeResume.id})}" class="btn btn-dark" role="button">Update</a>
+                <a type="button" th:href="@{/deletecover/{id}(id=${wholeResume.id})}" class="btn btn-dark" role="button">Delete</a><br /><br />
+            </div>
+            <div class="col-sm-10"></div>
+        </div>
+    </div>
+</div>
+
+
+
+<th:block th:replace="/template :: jslinks"></th:block>
+</body>
+</html>

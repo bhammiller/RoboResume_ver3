@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="www.thymeleaf.org"
+      xmlns:sec="http://www.tymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <title>Summary</title>
+    <th:block th:replace="/template :: headstuff"></th:block>
+</head>
+<body>
+<div th:replace="/template::navbarfragement">
+</div>
+<div sec:authorize="hasAuthority('APPLICANT')" class="container-fluid">
+    <h2>Summary</h2> <br />
+    <div class="container">
+        <h3>Input</h3>
+    <form action="#"
+          th:action="@{/processsummary}"
+          th:object="${addsummary}"
+          method="post">
+        <input type="hidden" th:field="*{id}" />
+        <div class="form-group row">
+            <label for="inputYousummary" class="col-sm-2 col-form-label">Summary :</label>
+            <div class="col-sm-5">
+                <textarea class="form-control" rows="5" id="inputYousummary" th:field="*{yousummary}" placeholder="Summary"></textarea>
+                <small class="form-text text-muted">Required</small>
+                <span th:if="${#fields.hasErrors('yousummary')}"
+                      th:errors="*{yousummary}"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-10">
+                <button type="submit" class="btn btn-primary">Add Reference</button>
+            </div>
+        </div>
+    </form>
+    </div>
+    <div class="container">
+        <div class="row" th:each="wholeResume : ${whole}">
+            <div class="col-sm-2">
+                <span th:text="${wholeResume.yousummary}"></span><br />
+                <a type="button" th:href="@{/updatesummary/{id}(id=${wholeResume.id})}" class="btn btn-dark" role="button">Update</a>
+                <a type="button" th:href="@{/deletesummary/{id}(id=${wholeResume.id})}" class="btn btn-dark" role="button">Delete</a><br /><br />
+            </div>
+            <div class="col-sm-10"></div>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="/template :: jslinks"></th:block>
+</body>
+</html>

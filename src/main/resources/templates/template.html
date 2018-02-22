@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="www.thymeleaf.org"
+      xmlns:sec="http://www.tymeleaf.org/thymeleaf-extras-springsecurity4">
+<head >
+    <title>Bootstrap 101 Template Integration</title>
+    <th:block th:fragment="headstuff">
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+
+    <link href="/css/bootstrap.css" rel="stylesheet"/>
+    <link href="/css/bootstrap-grid.css" rel="stylesheet"/>
+    <link href="/css/bootstrap-reboot.css" rel="stylesheet"/>
+    <style>
+        body {padding-bottom: 70px;}
+    </style>
+        <link href="/css/stylesheet.css" rel="stylesheet"/>
+    </th:block>
+</head>
+<body>
+<nav th:fragment="navbarfragement" class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+    <!-- Brand -->
+    <span class="navbar-brand">Resume Builder</span>
+
+    <!-- Links -->
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/addsummary}">Summary</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/contact}">Contact Information</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/addeducation}">Education</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/addexp}">Experience</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/addskills}">Skills</a>
+        </li>
+        <li sec:authorize="hasAuthority('APPLICANT')" class="nav-item">
+            <a class="nav-link" th:href="@{/addreferals}">References</a>
+        </li>
+
+        <!-- Dropdown -->
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                View
+            </a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" th:href="@{/complete}">Completed Resume</a>
+                <a class="dropdown-item" th:href="@{/addcover}">Cover Letter</a>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/login}"> Login</a>
+        </li>
+        <li sec:authorize="hasAuthority('APPLICANT')" class="nav-item">
+            <a class="nav-link" href="/logout">Logout</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/register}"> Register</a>
+        </li>
+    </ul>
+</nav>
+<th:block th:fragment="jslinks">
+    <script
+            src="https://ajax.googleapis.com/ajax/libs/jqury/1.12.4/jquery.min.js">
+    </script>
+    <script src="/js/bootstrap.js"></script>
+    <script src="/js/bootstrap.bundle.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</th:block>
+</body>
+</html>
