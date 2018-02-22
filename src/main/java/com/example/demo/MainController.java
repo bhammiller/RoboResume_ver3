@@ -420,13 +420,14 @@ public class MainController {
 
     // Completed Resume
     @RequestMapping("/complete")
-    public String listAddresses(Model model1, Model model2, Model model3, Model model4 , Authentication authentication){
-        AppUser user = appUserRepository.findAppUserByAppUsername(authentication.getName());
-        siteApplicants= siteApplicantsRepository.findByAppUserListContaining(user);
-        model1.addAttribute("whole", siteApplicants.getWholeResumeList());
+    public String listAddresses(Model model/*, Model model1, Model model2, Model model3, Model model4 */, Authentication authentication){
+        /*AppUser user = appUserRepository.findAppUserByAppUsername(authentication.getName());
+        siteApplicants= siteApplicantsRepository.findByAppUserListContaining(user);*/
+        model.addAttribute("applicants", siteApplicantsRepository.findAll());
+        /*model1.addAttribute("whole", siteApplicants.getWholeResumeList());
         model2.addAttribute("education", siteApplicants.getEducationResumeList());
         model3.addAttribute("experience", siteApplicants.getExpResumeList());
-        model4.addAttribute("skills", siteApplicants.getSkillsResumeList());
+        model4.addAttribute("skills", siteApplicants.getSkillsResumeList());*/
         return "resumeouput";
     }
 
