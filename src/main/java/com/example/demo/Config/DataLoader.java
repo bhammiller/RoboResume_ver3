@@ -51,7 +51,7 @@ public class DataLoader implements CommandLineRunner{
 
         // Users
         // User 1
-        AppUser user = new AppUser();
+        /*AppUser user = new AppUser();
         user.setAppUsername("John");
         user.setAppPassword("password1");
         user.setFullName("John Doe");
@@ -73,13 +73,13 @@ public class DataLoader implements CommandLineRunner{
         user.setFullName("Joe Blow");
         user.setUserEmail("g3@gmail.com");
         user.addRole(appRoleRepository.findAppRoleByRoleName("RECRUITER"));
-        appUserRepository.save(user);
+        appUserRepository.save(user);*/
 
-        // Applicants
+        /*// Applicants
         SiteApplicants siteApplicants = new SiteApplicants();
         siteApplicants.addCredentials(appUserRepository.findOne(new Long(1)));
         siteApplicants.addWhole(wholeResumeRepository.findById(new Long (1)));
-        siteApplicants.addEducation(educationRepository);
+        siteApplicants.addEducation(educationRepository);*/
     }
 
 }

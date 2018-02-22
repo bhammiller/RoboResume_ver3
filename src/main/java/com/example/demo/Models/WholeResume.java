@@ -26,12 +26,6 @@ public class WholeResume {
     @Email(message = "Please your email address")
     private String email;
 
-    @Size(min=1)
-    private String yousummary;
-
-    @Size(min=1)
-    private String coverletter;
-
     @URL
     private String youimage;
 
@@ -78,22 +72,6 @@ public class WholeResume {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getYousummary() {
-        return yousummary;
-    }
-
-    public void setYousummary(String yousummary) {
-        this.yousummary = yousummary;
-    }
-
-    public String getCoverletter() {
-        return coverletter;
-    }
-
-    public void setCoverletter(String coverletter) {
-        this.coverletter = coverletter;
     }
 
     public String getYouimage() {

@@ -34,11 +34,11 @@
     </form>
     </div>
     <div class="container">
-        <div class="row" th:each="wholeResume : ${whole}">
+        <div class="row" th:each="coverLetter : ${covery}">
             <div class="col-sm-2">
-                <span th:text="${wholeResume.coverletter}"></span><br />
-                <a type="button" th:href="@{/updatecover/{id}(id=${wholeResume.id})}" class="btn btn-dark" role="button">Update</a>
-                <a type="button" th:href="@{/deletecover/{id}(id=${wholeResume.id})}" class="btn btn-dark" role="button">Delete</a><br /><br />
+                <span th:text="${coverLetter.coverletter}"></span><br />
+                <a type="button" th:href="@{/updatecover/{id}(id=${coverLetter.id})}" class="btn btn-dark" role="button">Update</a>
+                <!--<a type="button" th:href="@{/deletecover/{id}(id=${coverLetter.id})}" class="btn btn-dark" role="button">Delete</a><br /><br />-->
             </div>
             <div class="col-sm-10"></div>
         </div>

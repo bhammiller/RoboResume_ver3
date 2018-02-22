@@ -40,6 +40,10 @@ public class SiteApplicants {
     private List<SkillsResume> skillsResumeList;
     @ManyToMany
     private List<WholeResume> wholeResumeList;
+    @ManyToMany
+    private List<CoverLetter> coverLetterList;
+    @ManyToMany
+    private List<SummaryResume> summaryResumeList;
 
 
     public SiteApplicants() {
@@ -49,6 +53,8 @@ public class SiteApplicants {
         this.skillsResumeList = new ArrayList<>();
         this.wholeResumeList = new ArrayList<>();
         this.appUserList = new ArrayList<>();
+        this.summaryResumeList= new ArrayList<>();
+        this.coverLetterList=new ArrayList<>();
     }
     public void addEducation(EducationResume e){
         this.educationResumeList.add(e);
@@ -73,6 +79,13 @@ public class SiteApplicants {
     public void addCredentials(AppUser a){
         this.appUserList.add(a);
     }
+
+    public void addCover(CoverLetter c){
+        this.coverLetterList.add(c);
+    }
+     public void addSummary(SummaryResume sr){
+        this.summaryResumeList.add(sr);
+     }
 
     public long getId() {
         return id;
@@ -120,5 +133,21 @@ public class SiteApplicants {
 
     public void setWholeResumeList(List<WholeResume> wholeResumeList) {
         this.wholeResumeList = wholeResumeList;
+    }
+
+    public List<CoverLetter> getCoverLetterList() {
+        return coverLetterList;
+    }
+
+    public void setCoverLetterList(List<CoverLetter> coverLetterList) {
+        this.coverLetterList = coverLetterList;
+    }
+
+    public List<SummaryResume> getSummaryResumeList() {
+        return summaryResumeList;
+    }
+
+    public void setSummaryResumeList(List<SummaryResume> summaryResumeList) {
+        this.summaryResumeList = summaryResumeList;
     }
 }
