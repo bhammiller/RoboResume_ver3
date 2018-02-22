@@ -29,6 +29,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
         http
 
                 .authorizeRequests()
+                .antMatchers("/","/register","/contact","/css/**","/js/**","/addeducation","/addexp","/addskills","/addcover","/addsummary","/complete").permitAll()
+                .antMatchers("/h2-console/**","/updatecontact/{id}","/process","/processeducation","/updateeducation/{id}",
+                        "/deleteeducation/{id}","/processexp","/updateexp/{id}","/deleteexp/{id}","/processskill",
+                        "/updateskill/{id}","/deleteskill/{id}","/processreferals","/updateref/{id}","/deleteref/{id}","/processcover",
+                        "/addreferals","/updatecover/{id}","/deletecover/{id}","/processsummary","/updatesummary/{id}","/deletesummary/{id}").hasAuthority("APPLICANT")
                 .anyRequest().authenticated();
 
         http

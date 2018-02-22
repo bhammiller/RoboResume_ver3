@@ -1,18 +1,15 @@
 package com.example.demo.Models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Entity
 public class EducationResume {
 
     @Id
-
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
@@ -32,7 +29,22 @@ public class EducationResume {
     @Size(min=1, message = "Please enter graduation year")
     private String degreeyear;
 
+    // Connections
+    @ManyToMany(mappedBy = "educationResumeList")
+    private List<SiteApplicants> wholeEdResumeList;
 
+    public EducationResume() {
+    }
+
+    public List<SiteApplicants> getWholeEdResumeList() {
+        return wholeEdResumeList;
+    }
+
+    public void setWholeEdResumeList(List<SiteApplicants> wholeEdResumeList) {
+        this.wholeEdResumeList = wholeEdResumeList;
+    }
+
+    //Getters and Setters
     public long getId() {
         return id;
     }

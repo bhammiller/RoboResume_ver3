@@ -4,6 +4,7 @@ import com.example.demo.Models.*;
 import com.example.demo.Repositories.*;
 import com.example.demo.Config.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -31,9 +32,17 @@ public class MainController {
 
     @Autowired
     AppUserRepository appUserRepository;
+    @Autowired
+    SiteApplicantsRepository siteApplicantsRepository;
+    @Autowired
+    CoverLetterRepository coverLetterRepository;
+    @Autowired
+    SummaryResumeRepository summaryResumeRepository;
 
     @Autowired
     AppRoleRepository appRoleRepository;
+
+    SiteApplicants siteApplicants;
 
     public WholeResume wholeResumeM =new WholeResume();
 
@@ -54,7 +63,7 @@ public class MainController {
     }
 
     @PostMapping("/register")
-    public String addNewUser(@Valid @ModelAttribute("NewUser") AppUser newUser, BindingResult result, Model model)
+    public String addNewUser(@Valid @ModelAttribute("NewUser") AppUser newUser,  BindingResult result, Model model)
     {
 
         if(result.hasErrors())
@@ -69,6 +78,9 @@ public class MainController {
             appUserRepository.save(newUser);
             newUser.addRole(r);
             appUserRepository.save(newUser);
+            siteApplicants = new SiteApplicants();
+            siteApplicants.addCredentials(newUser);
+            siteApplicantsRepository.save(siteApplicants);
             return "redirect:/";
         }
     }
@@ -83,24 +95,33 @@ public class MainController {
 
     // Contact Information Methods
     @GetMapping("/contact")
-    public String startContact(Model model){
-        model.addAttribute("whole", wholeResumeRepository.findAll());
+    public String startContact(Model model, Authentication authentication){
+        AppUser user = appUserRepository.findAppUserByAppUsername(authentication.getName());
+        siteApplicants= siteApplicantsRepository.findByAppUserListContaining(user);
+        model.addAttribute("whole", siteApplicants.getWholeResumeList());
         model.addAttribute("addwhole", new WholeResume());
         return "resumebuilder";
     }
 
     @PostMapping("/process")
-    public String processBegin(@Valid @ModelAttribute("addwhole") WholeResume wholeResume, BindingResult result){
+    public String processBegin(@Valid @ModelAttribute("addwhole") WholeResume wholeResume,
+                               BindingResult result, Authentication authentication){
         if (result.hasErrors()){
             return "resumebuilder";
         }
         wholeResumeRepository.save(wholeResume);
+        AppUser user = appUserRepository.findAppUserByAppUsername(authentication.getName());
+        siteApplicants= siteApplicantsRepository.findByAppUserListContaining(user);
+        siteApplicants.addWhole(wholeResume);
+        siteApplicantsRepository.save(siteApplicants);
         return "redirect:/contact";
     }
 
     @RequestMapping("/updatecontact/{id}")
-    public String updateContact(@PathVariable("id") long id, Model model) {
-        model.addAttribute("whole", wholeResumeRepository.findAll());
+    public String updateContact(@PathVariable("id") long id, Model model , Authentication authentication) {
+        AppUser user = appUserRepository.findAppUserByAppUsername(authentication.getName());
+        siteApplicants= siteApplicantsRepository.findByAppUserListContaining(user);
+        model.addAttribute("whole", siteApplicants.getWholeResumeList());
         model.addAttribute("addwhole", wholeResumeRepository.findOne(id));
         return "resumebuilder";
     }
@@ -108,236 +129,305 @@ public class MainController {
 
     // Education Methods
     @GetMapping("/addeducation")
-    public String educationForm(Model model){
-        model.addAttribute("education", educationRepository.findAll());
+    public String educationForm(Model model, Authentication authentication){
+        AppUser user = appUserRepository.findAppUserByAppUsername(authentication.getName());
+        siteApplicants= siteApplicantsRepository.findByAppUserListContaining(user);
+        model.addAttribute("education", siteApplicants.getEducationResumeList());
         model.addAttribute("addeducation", new EducationResume());
         return "inputeducation";
     }
 
     @PostMapping("/addeducation")
-    public String postedEducation(@Valid @ModelAttribute("addeducation") Model model){
-        model.addAttribute("education", educationRepository.findAll());
+    public String postedEducation(@Valid @ModelAttribute("addeducation") Model model, Authentication authentication){
+        AppUser user = appUserRepository.findAppUserByAppUsername(authentication.getName());
+        siteApplicants= siteApplicantsRepository.findByAppUserListContaining(user);
+        model.addAttribute("education", siteApplicants.getEducationResumeList());
         model.addAttribute("addeducation", new EducationResume());
         return "inputeducation";
     }
 
     @PostMapping("/processeducation")
-    public String processEducation(@Valid @ModelAttribute("addeducation") EducationResume educationResume, BindingResult result){
+    public String processEducation(@Valid @ModelAttribute("addeducation") EducationResume educationResume,
+                                   BindingResult result, Authentication authentication){
         if (result.hasErrors()){
             return "inputeducation";
         }
         educationRepository.save(educationResume);
+        AppUser user = appUserRepository.findAppUserByAppUsername(authentication.getName());
+        siteApplicants= siteApplicantsRepository.findByAppUserListContaining(user);
+        siteApplicants.addEducation(educationResume);
+        siteApplicantsRepository.save(siteApplicants);
         return "redirect:/addeducation";
     }
 
     @RequestMapping("/updateeducation/{id}")
-    public String updateEducation(@PathVariable("id") long id, Model model){
-        model.addAttribute("education", educationRepository.findAll());
+    public String updateEducation(@PathVariable("id") long id, Model model, Authentication authentication){
+        AppUser user = appUserRepository.findAppUserByAppUsername(authentication.getName());
+        siteApplicants= siteApplicantsRepository.findByAppUserListContaining(user);
+        model.addAttribute("education", siteApplicants.getEducationResumeList());
         model.addAttribute("addeducation", educationRepository.findOne(id));
         return "inputeducation";
     }
 
-    @RequestMapping("/deleteeducation/{id}")
+    /*@RequestMapping("/deleteeducation/{id}")
     public String delEducation(@PathVariable("id") long id){
         educationRepository.delete(id);
         return "redirect:/addeducation";
-    }
+    }*/
 
     // Experience Methods
     @GetMapping("/addexp")
-    public String expForm(Model model){
-        model.addAttribute("experience", expRepository.findAll());
+    public String expForm(Model model, Authentication authentication){
+        AppUser user = appUserRepository.findAppUserByAppUsername(authentication.getName());
+        siteApplicants= siteApplicantsRepository.findByAppUserListContaining(user);
+        model.addAttribute("experience", siteApplicants.getExpResumeList());
         model.addAttribute("addexp", new ExpResume());
         return "inputexp";
     }
 
     @PostMapping("/addexp")
-    public String postedExp(@Valid @ModelAttribute("addexp") Model model){
-        model.addAttribute("experience", expRepository.findAll());
+    public String postedExp(@Valid @ModelAttribute("addexp") Model model, Authentication authentication){
+        AppUser user = appUserRepository.findAppUserByAppUsername(authentication.getName());
+        siteApplicants= siteApplicantsRepository.findByAppUserListContaining(user);
+        model.addAttribute("experience", siteApplicants.getExpResumeList());
         model.addAttribute("addexp", new ExpResume());
         return "inputexp";
     }
 
     @PostMapping("/processexp")
-    public String processExp(@Valid @ModelAttribute("addexp") ExpResume expresume, BindingResult result){
+    public String processExp(@Valid @ModelAttribute("addexp") ExpResume expresume,
+                             BindingResult result, Authentication authentication){
         if (result.hasErrors()){
             return "inputexp";
         }
         expRepository.save(expresume);
+        AppUser user = appUserRepository.findAppUserByAppUsername(authentication.getName());
+        siteApplicants= siteApplicantsRepository.findByAppUserListContaining(user);
+        siteApplicants.addExperience(expresume);
+        siteApplicantsRepository.save(siteApplicants);
         return "redirect:/addexp";
     }
 
     @RequestMapping("/updateexp/{id}")
-    public String updateExp(@PathVariable("id") long id, Model model){
-        model.addAttribute("experience", expRepository.findAll());
+    public String updateExp(@PathVariable("id") long id, Model model, Authentication authentication){
+        AppUser user = appUserRepository.findAppUserByAppUsername(authentication.getName());
+        siteApplicants= siteApplicantsRepository.findByAppUserListContaining(user);
+        model.addAttribute("experience", siteApplicants.getExpResumeList());
         model.addAttribute("addexp", expRepository.findOne(id));
         return "inputexp";
     }
 
-    @RequestMapping("/deleteexp/{id}")
+   /* @RequestMapping("/deleteexp/{id}")
     public String delExp(@PathVariable("id") long id){
         expRepository.delete(id);
         return "redirect:/addexp";
-    }
+    }*/
 
     // Skills Methods
     @GetMapping("/addskills")
-    public String skillsForm(Model model){
-        model.addAttribute("skills", skillRepository.findAll());
+    public String skillsForm(Model model, Authentication authentication){
+        AppUser user = appUserRepository.findAppUserByAppUsername(authentication.getName());
+        siteApplicants= siteApplicantsRepository.findByAppUserListContaining(user);
+        model.addAttribute("skills", siteApplicants.getSkillsResumeList());
         model.addAttribute("addskill", new SkillsResume());
         return "inputskills";
     }
 
     @PostMapping("/addskills")
-    public String postedSkills(@Valid @ModelAttribute("addskill") Model model){
-        model.addAttribute("skills", skillRepository.findAll());
+    public String postedSkills(@Valid @ModelAttribute("addskill") Model model, Authentication authentication){
+        AppUser user = appUserRepository.findAppUserByAppUsername(authentication.getName());
+        siteApplicants= siteApplicantsRepository.findByAppUserListContaining(user);
+        model.addAttribute("skills", siteApplicants.getSkillsResumeList());
         model.addAttribute("addskill", new SkillsResume());
         return "inputskills";
     }
 
     @PostMapping("/processskill")
-    public String processSkills(@Valid @ModelAttribute("addskill") SkillsResume skillsResume, BindingResult result){
+    public String processSkills(@Valid @ModelAttribute("addskill") SkillsResume skillsResume,
+                                BindingResult result, Authentication authentication){
         if (result.hasErrors()){
             return "inputskills";
         }
         skillRepository.save(skillsResume);
+        AppUser user = appUserRepository.findAppUserByAppUsername(authentication.getName());
+        siteApplicants= siteApplicantsRepository.findByAppUserListContaining(user);
+        siteApplicants.addSkills(skillsResume);
+        siteApplicantsRepository.save(siteApplicants);
         return "redirect:/addskills";
     }
 
-    @RequestMapping("/updateskill/{id}")
-    public String updateSkill(@PathVariable("id") long id, Model model){
-        model.addAttribute("skills", skillRepository.findAll());
+    @RequestMapping("/updateskill/{id}" )
+    public String updateSkill(@PathVariable("id") long id, Model model, Authentication authentication){
+        AppUser user = appUserRepository.findAppUserByAppUsername(authentication.getName());
+        siteApplicants= siteApplicantsRepository.findByAppUserListContaining(user);
+        model.addAttribute("skills", siteApplicants.getSkillsResumeList());
         model.addAttribute("addskills", skillRepository.findOne(id));
-        return "addressform";
+        return "inputskills";
     }
 
-    @RequestMapping("/deleteskill/{id}")
+    /*@RequestMapping("/deleteskill/{id}")
     public String delSkill(@PathVariable("id") long id){
         skillRepository.delete(id);
         return "redirect:/addskills";
-    }
+    }*/
 
     // References Methods
     @GetMapping("/addreferals")
-    public String refForm(Model model){
-        model.addAttribute("referes", refrepository.findAll());
+    public String refForm(Model model, Authentication authentication){
+        AppUser user = appUserRepository.findAppUserByAppUsername(authentication.getName());
+        siteApplicants= siteApplicantsRepository.findByAppUserListContaining(user);
+        model.addAttribute("referes", siteApplicants.getResumeReferencesList());
         model.addAttribute("addreferals", new ResumeReferences());
         return "referalpage";
     }
 
     @PostMapping("/addreferals")
-    public String postedRef(@Valid @ModelAttribute("addreferals") Model model){
-        model.addAttribute("referes", refrepository.findAll());
+    public String postedRef(@Valid @ModelAttribute("addreferals") Model model, Authentication authentication){
+        AppUser user = appUserRepository.findAppUserByAppUsername(authentication.getName());
+        siteApplicants= siteApplicantsRepository.findByAppUserListContaining(user);
+        model.addAttribute("referes", siteApplicants.getResumeReferencesList());
         model.addAttribute("addreferals", new ResumeReferences());
         return "referalpage";
     }
 
     @PostMapping("/processreferals")
-    public String processref(@Valid @ModelAttribute("addreferals") ResumeReferences references, BindingResult result){
+    public String processref(@Valid @ModelAttribute("addreferals") ResumeReferences references,
+                             BindingResult result, Authentication authentication){
         if (result.hasErrors()){
             return "referalpage";
         }
         refrepository.save(references);
+        AppUser user = appUserRepository.findAppUserByAppUsername(authentication.getName());
+        siteApplicants= siteApplicantsRepository.findByAppUserListContaining(user);
+        siteApplicants.addReferances(references);
+        siteApplicantsRepository.save(siteApplicants);
         return "redirect:/addreferals";
     }
 
     @RequestMapping("/updateref/{id}")
-    public String updateRef(@PathVariable("id") long id, Model model){
-        model.addAttribute("referes", refrepository.findAll());
+    public String updateRef(@PathVariable("id") long id, Model model, Authentication authentication){
+        AppUser user = appUserRepository.findAppUserByAppUsername(authentication.getName());
+        siteApplicants= siteApplicantsRepository.findByAppUserListContaining(user);
+        model.addAttribute("referes", siteApplicants.getResumeReferencesList());
         model.addAttribute("addreferals", refrepository.findOne(id));
         return "referalpage";
     }
 
-    @RequestMapping("/deleteref/{id}")
+    /*@RequestMapping("/deleteref/{id}")
     public String delRef(@PathVariable("id") long id){
         refrepository.delete(id);
         return "redirect:/addreferals";
-    }
+    }*/
 
 
     // Cover Letter Methods
     @GetMapping("/addcover")
-    public String coverForm(Model model){
-        model.addAttribute("whole", wholeResumeRepository.findAll());
-        model.addAttribute("addcover", new WholeResume());
+    public String coverForm(Model model, Authentication authentication){
+        AppUser user = appUserRepository.findAppUserByAppUsername(authentication.getName());
+        siteApplicants= siteApplicantsRepository.findByAppUserListContaining(user);
+        model.addAttribute("covery", siteApplicants.getCoverLetterList());
+        model.addAttribute("addcover", new CoverLetter());
         return "coverletter";
     }
 
     @PostMapping("/addcover")
-    public String postedCover(@Valid @ModelAttribute("addcover") Model model){
-        model.addAttribute("whole", wholeResumeRepository.findAll());
-        model.addAttribute("addcover", new WholeResume());
+    public String postedCover(@Valid @ModelAttribute("addcover") Model model, Authentication authentication){
+        AppUser user = appUserRepository.findAppUserByAppUsername(authentication.getName());
+        siteApplicants= siteApplicantsRepository.findByAppUserListContaining(user);
+        model.addAttribute("covery", siteApplicants.getCoverLetterList());
+        model.addAttribute("addcover", new CoverLetter());
         return "coverletter";
     }
 
     @PostMapping("/processcover")
-    public String processCover(@Valid @ModelAttribute("addcover") WholeResume wholeResume, BindingResult result){
+    public String processCover(@Valid @ModelAttribute("addcover") CoverLetter coverLetter,
+                               BindingResult result, Authentication authentication){
         if (result.hasErrors()){
             return "coverletter";
         }
-        wholeResumeRepository.save(wholeResume);
+        coverLetterRepository.save(coverLetter);
+        AppUser user = appUserRepository.findAppUserByAppUsername(authentication.getName());
+        siteApplicants= siteApplicantsRepository.findByAppUserListContaining(user);
+        siteApplicants.addCover(coverLetter);
+        siteApplicantsRepository.save(siteApplicants);
         return "redirect:/addcover";
     }
 
     @RequestMapping("/updatecover/{id}")
-    public String updateCover(@PathVariable("id") long id, Model model){
-        model.addAttribute("whole", wholeResumeRepository.findAll());
-        model.addAttribute("addcover", wholeResumeRepository.findOne(id));
+    public String updateCover(@PathVariable("id") long id, Model model, Authentication authentication){
+        AppUser user = appUserRepository.findAppUserByAppUsername(authentication.getName());
+        siteApplicants= siteApplicantsRepository.findByAppUserListContaining(user);
+        model.addAttribute("covery", siteApplicants.getCoverLetterList());
+        model.addAttribute("addcover", coverLetterRepository.findOne(id));
         return "coverletter";
     }
 
-    @RequestMapping("/deletecover/{id}")
+    /*@RequestMapping("/deletecover/{id}")
     public String delCover(@PathVariable("id") long id){
         wholeResumeRepository.delete(id);
         return "redirect:/addcover";
-    }
+    }*/
 
 
     // Summary Methods
     @GetMapping("/addsummary")
-    public String summaryForm(Model model){
-        model.addAttribute("whole", wholeResumeRepository.findAll());
-        model.addAttribute("addsummary", new WholeResume());
+    public String summaryForm(Model model, Authentication authentication){
+        AppUser user = appUserRepository.findAppUserByAppUsername(authentication.getName());
+        siteApplicants= siteApplicantsRepository.findByAppUserListContaining(user);
+        model.addAttribute("summery", siteApplicants.getSummaryResumeList());
+        model.addAttribute("addsummary", new SummaryResume());
         return "summary";
     }
 
     @PostMapping("/addsummary")
-    public String postedSummary(@Valid @ModelAttribute("addskill") Model model){
-        model.addAttribute("whole", wholeResumeRepository.findAll());
-        model.addAttribute("addsummary", new WholeResume());
+    public String postedSummary(@Valid @ModelAttribute("addsummary") Model model, Authentication authentication){
+        AppUser user = appUserRepository.findAppUserByAppUsername(authentication.getName());
+        siteApplicants= siteApplicantsRepository.findByAppUserListContaining(user);
+        model.addAttribute("summery", siteApplicants.getSummaryResumeList());
+        model.addAttribute("addsummary", new SummaryResume());
         return "summary";
     }
 
     @PostMapping("/processsummary")
-    public String processSummary(@Valid @ModelAttribute("addsummary") WholeResume wholeResume, BindingResult result){
+    public String processSummary(@Valid @ModelAttribute("addsummary") SummaryResume summaryResume,
+                                 BindingResult result, Authentication authentication){
         if (result.hasErrors()){
             return "summary";
         }
-        wholeResumeRepository.save(wholeResume);
+        summaryResumeRepository.save(summaryResume);
+        AppUser user = appUserRepository.findAppUserByAppUsername(authentication.getName());
+        siteApplicants= siteApplicantsRepository.findByAppUserListContaining(user);
+        siteApplicants.addSummary(summaryResume);
+        siteApplicantsRepository.save(siteApplicants);
         return "redirect:/addsummary";
     }
 
     @RequestMapping("/updatesummary/{id}")
-    public String updateSummary(@PathVariable("id") long id, Model model){
-        model.addAttribute("whole", wholeResumeRepository.findAll());
-        model.addAttribute("addsummary", wholeResumeRepository.findOne(id));
+    public String updateSummary(@PathVariable("id") long id, Model model, Authentication authentication){
+        AppUser user = appUserRepository.findAppUserByAppUsername(authentication.getName());
+        siteApplicants= siteApplicantsRepository.findByAppUserListContaining(user);
+        model.addAttribute("summery", siteApplicants.getSummaryResumeList());
+        model.addAttribute("addsummary", summaryResumeRepository.findOne(id));
         return "summary";
     }
 
-    @RequestMapping("/deletesummary/{id}")
+   /* @RequestMapping("/deletesummary/{id}")
     public String delSummary(@PathVariable("id") long id){
         wholeResumeRepository.delete(id);
         return "redirect:/addsummary";
-    }
+    }*/
 
 
     // Completed Resume
     @RequestMapping("/complete")
-    public String listAddresses(Model model1, Model model2, Model model3, Model model4){
-        model1.addAttribute("whole", wholeResumeRepository.findAll());
-        model2.addAttribute("education", educationRepository.findAll());
-        model3.addAttribute("experience", expRepository.findAll());
-        model4.addAttribute("skills", skillRepository.findAll());
+    public String listAddresses(Model model/*, Model model1, Model model2, Model model3, Model model4 */, Authentication authentication){
+        /*AppUser user = appUserRepository.findAppUserByAppUsername(authentication.getName());
+        siteApplicants= siteApplicantsRepository.findByAppUserListContaining(user);*/
+        model.addAttribute("applicants", siteApplicantsRepository.findAll());
+        /*model1.addAttribute("whole", siteApplicants.getWholeResumeList());
+        model2.addAttribute("education", siteApplicants.getEducationResumeList());
+        model3.addAttribute("experience", siteApplicants.getExpResumeList());
+        model4.addAttribute("skills", siteApplicants.getSkillsResumeList());*/
         return "resumeouput";
     }
 

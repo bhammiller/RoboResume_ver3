@@ -4,5 +4,6 @@ import com.example.demo.Models.ResumeReferences;
 import org.springframework.data.repository.CrudRepository;
 
 public interface ResumeReferenceRepository extends CrudRepository<ResumeReferences, Long> {
+    ResumeReferences findById(Long id);
 
 }

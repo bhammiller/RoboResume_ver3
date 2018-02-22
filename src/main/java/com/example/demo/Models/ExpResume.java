@@ -1,18 +1,15 @@
 package com.example.demo.Models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Entity
 public class ExpResume {
 
     @Id
-
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
@@ -36,7 +33,22 @@ public class ExpResume {
     @Size(min=1, message = "please enter your duties")
     private String duties;
 
+    // Connections
+    @ManyToMany(mappedBy = "expResumeList")
+    private List<SiteApplicants> siteApplicantsExpList;
 
+    public ExpResume() {
+    }
+
+    public List<SiteApplicants> getWholeExpResumeList() {
+        return siteApplicantsExpList;
+    }
+
+    public void setWholeExpResumeList(List<SiteApplicants> wholeExpResumeList) {
+        this.siteApplicantsExpList = wholeExpResumeList;
+    }
+
+    // Getters and Setters
     public long getId() {
         return id;
     }

@@ -1,18 +1,15 @@
 package com.example.demo.Models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Entity
 public class SkillsResume {
 
     @Id
-
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
@@ -24,6 +21,22 @@ public class SkillsResume {
     @Size(min=1, message = "Please enter skill level")
     private String skilllevel;
 
+    // Connections
+    @ManyToMany(mappedBy = "skillsResumeList")
+    private List<SiteApplicants> wholeSkillResumeList;
+
+    public SkillsResume() {
+    }
+
+    public List<SiteApplicants> getWholeSkillResumeList() {
+        return wholeSkillResumeList;
+    }
+
+    public void setWholeSkillResumeList(List<SiteApplicants> wholeSkillResumeList) {
+        this.wholeSkillResumeList = wholeSkillResumeList;
+    }
+
+    //Getters and Setters
     public long getId() {
         return id;
     }
