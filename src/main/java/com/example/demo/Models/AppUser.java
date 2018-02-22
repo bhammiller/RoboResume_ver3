@@ -7,6 +7,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -16,7 +17,6 @@ public class AppUser {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    private String image;
 
     @NotEmpty
     @Column(unique = true)
@@ -25,14 +25,10 @@ public class AppUser {
     @NotEmpty
     private String appPassword;
 
-    private String firstName;
-
-    private String lastName;
-
-    private String resumeSummary;
-
     @Email
-    private String email;
+    private String userEmail;
+
+    private String fullName;
 
     @CreationTimestamp
     Timestamp createdAt;
@@ -43,6 +39,18 @@ public class AppUser {
 
     public AppUser() {
         this.roles = new HashSet<>();
+    }
+
+    // Connects to Applicants
+    @ManyToMany(mappedBy = "appUserList")
+    private List<SiteApplicants> siteApplicantsList;
+
+    public List<SiteApplicants> getSiteApplicantsList() {
+        return siteApplicantsList;
+    }
+
+    public void setSiteApplicantsList(List<SiteApplicants> siteApplicantsList) {
+        this.siteApplicantsList = siteApplicantsList;
     }
 
     public long getId() {
@@ -89,43 +97,21 @@ public class AppUser {
         this.roles.add(role);
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getUserEmail() {
+        return userEmail;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
-    public String getImage() {
-        return image;
-    }
 
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    public String getResumeSummary() {
-        return resumeSummary;
-    }
-
-    public void setResumeSummary(String resumeSummary) {
-        this.resumeSummary = resumeSummary;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 }

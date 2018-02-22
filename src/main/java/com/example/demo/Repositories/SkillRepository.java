@@ -5,4 +5,5 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface SkillRepository extends CrudRepository<SkillsResume,Long> {
+    SkillsResume findById(Long id);
 }
