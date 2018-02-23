@@ -53,6 +53,8 @@ public class MainController {
 
     SiteJobs sitejobs;
 
+    SiteOrganizations siteOrganizations;
+
     public WholeResume wholeResumeM =new WholeResume();
 
 
@@ -429,17 +431,28 @@ public class MainController {
     // Jobs Methods
     @GetMapping("/addjob")
     public String jobForm(Model model){
-
+        model.addAttribute("orgdetails", siteOrganizations);
+        model.addAttribute("addjob", new SiteJobs());
+        return "organizationdetails";
     }
 
     @PostMapping("/addjob")
     public String postedJob(@Valid @ModelAttribute("addjob") Model model){
-
+        model.addAttribute("orgdetails", siteOrganizations);
+        model.addAttribute("addjob", new SiteJobs());
+        return "organizationdetails";
     }
 
     @PostMapping("/processjob")
-    public String processJob(@Valid @ModelAttribute("addjob") SiteJobs siteJobs,
+    public String processJob(@Valid @ModelAttribute("addjob") SiteJobs siteJobs1,
                                BindingResult result){
+        if (result.hasErrors()){
+            return "organization";
+        }
+        siteJobsRepository.save(siteJobs1);
+        siteOrganizations.addSiteJobs(siteJobs1);
+        siteOrganizationsRepository.save(siteOrganizations);
+        return "redirect:/addjob";
 
     }
 
@@ -510,6 +523,7 @@ public class MainController {
     @RequestMapping("/orgdetail/{id}")
     public String orgDetail(@PathVariable("id") long id, Model model){
         model.addAttribute("orgdetails", siteOrganizationsRepository.findOne(id));
+        siteOrganizations=siteOrganizationsRepository.findOne(id);
         return "organizationdetails";
     }
 

@@ -10,7 +10,7 @@
 
 <div class="container-fluid">
     
-    <div sec:authorize="hasAuthority('APPLICANT')" class="container">
+    <div sec:authorize="hasAnyAuthority('EMPLOYER','RECRUITER')" class="container">
         <h2>Add Organizations</h2>
         <form action="#"
               th:action="@{/processorg}"
@@ -26,11 +26,10 @@
                           th:errors="*{organizationName}" class="text-danger"></span>
                 </div>
             </div>
-            <h3>Skill level</h3>
             <div class="form-group row">
                 <label for="orgDescribtion" class="col-sm-2 col-form-label">Organization Description </label>
                 <div class="col-sm-5">
-                    <input type="text" class="form-control" id="orgDescribtion" th:field="*{organizationDescription}" placeholder="Description" />
+                    <input class="form-control" rows="5" id="orgDescribtion" th:field="*{organizationDescription}" placeholder="Description" />
                     <small class="form-text text-muted">Required</small>
                     <span th:if="${#fields.hasErrors('organizationDescription')}"
                           th:errors="*{organizationDescription}" class="text-danger"></span>

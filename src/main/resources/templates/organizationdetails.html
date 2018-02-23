@@ -1,10 +1,95 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="www.thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="www.thymeleaf.org"
+      xmlns:sec="http://www.tymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
-    <meta charset="UTF-8"/>
-    <title>Title</title>
+    <title>Organization Details</title>
+    <th:block th:replace="/template :: headstuff"></th:block>
 </head>
 <body>
+<div th:replace="/template::navbarfragement">
+</div>
 
+<div class="container-fluid">
+    <div class="container" >
+        <div class="row">
+            <div class="col-6">
+                <table class="table table-striped table-bordered">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>Organization Details</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Organization Name </td>
+                        <td th:text="${siteOrganizations.organizationName}"></td>
+
+                    </tr>
+                    <tr>
+                        <td>Organization Description</td>
+                        <td th:text="${siteOrganizations.organizationDescription}"></td>
+                    </tr>
+                    </tbody>
+                </table><br />
+                <div sec:authorize="hasAuthority('APPLICANT')" class="container">
+                    <h2>Add Job</h2>
+                    <form action="#"
+                          th:action="@{/processjob}"
+                          th:object="${addjob}"
+                          method="post">
+                        <input type="hidden" th:field="*{id}" />
+                        <div class="form-group row">
+                            <label for="jobTitle" class="col-sm-2 col-form-label">Job Name </label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" id="jobTitle" th:field="*{jobTitle}" placeholder="Name" />
+                                <small class="form-text text-muted">Required</small>
+                                <span th:if="${#fields.hasErrors('jobTitle')}"
+                                      th:errors="*{jobTitle}" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="orgDescribtion" class="col-sm-2 col-form-label">Job Description </label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" id="orgDescribtion" th:field="*{organizationDescription}" placeholder="Description" />
+                                <small class="form-text text-muted">Required</small>
+                                <span th:if="${#fields.hasErrors('organizationDescription')}"
+                                      th:errors="*{organizationDescription}" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-10">
+                                <button type="submit" class="btn btn-primary">Add</button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <br /><br />
+                <table class="table table-striped table-bordered">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>Organization Jobs</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="SiteJobs : ${siteOrganizations.getSiteJobsOrgList()}">
+                        <td>Job Name </td>
+                        <td><a th:href="@{/jobdetail/{id}(id=${SiteJobs.id})}" th:text="${siteJobs.jobTitle}" ></a></td>
+
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        
+        
+    </div>
+</div>
+<th:block th:replace="/template :: jslinks"></th:block>
 </body>
 </html>
