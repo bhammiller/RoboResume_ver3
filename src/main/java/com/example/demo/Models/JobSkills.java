@@ -1,6 +1,7 @@
 package com.example.demo.Models;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Entity
@@ -9,6 +10,7 @@ public class JobSkills {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @Size(min = 1)
     private String jobSkillName;
 
     //Connections to other Classes
