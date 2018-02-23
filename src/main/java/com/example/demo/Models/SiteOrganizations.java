@@ -21,6 +21,13 @@ public class SiteOrganizations {
         this.siteJobsOrgList = siteJobsOrgList;
     }
 
+    public SiteOrganizations() {
+    }
+
+    public void addSiteJobs(SiteJobs q){
+        this.siteJobsOrgList.add(q);
+    }
+
     public List<SiteJobs> getSiteJobsOrgList() {
         return siteJobsOrgList;
     }

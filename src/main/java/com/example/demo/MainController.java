@@ -42,7 +42,16 @@ public class MainController {
     @Autowired
     AppRoleRepository appRoleRepository;
 
+    @Autowired
+    SiteOrganizationsRepository siteOrganizationsRepository;
+    @Autowired
+    SiteJobsRepository siteJobsRepository;
+    @Autowired
+    JobSkillsRepository jobSkillsRepository;
+
     SiteApplicants siteApplicants;
+
+    SiteJobs sitejobs;
 
     public WholeResume wholeResumeM =new WholeResume();
 
@@ -432,6 +441,76 @@ public class MainController {
     public String processJob(@Valid @ModelAttribute("addjob") SiteJobs siteJobs,
                                BindingResult result){
 
+    }
+
+    @RequestMapping("/jobdetail/{id}")
+    public String jobDetail(@PathVariable("id") long id, Model model){
+        model.addAttribute("jobdetails", siteJobsRepository.findOne(id));
+        sitejobs=siteJobsRepository.findOne(id);
+        return "jobdetails";
+    }
+
+    // JobSkills Methods
+    @GetMapping("/addjobskill")
+    public String jobskillForm(Model model){
+        model.addAttribute("jobdeatails", sitejobs);
+        model.addAttribute("addjobskill", new JobSkills());
+        return "jobdetails";
+
+    }
+
+    @PostMapping("/addjobskill")
+    public String postedJobskill(@Valid @ModelAttribute("addjobskill") Model model){
+        model.addAttribute("jobdeatails", sitejobs);
+        model.addAttribute("addjobskill", new JobSkills());
+        return "jobdetails";
+
+    }
+
+    @PostMapping("/processjobskill")
+    public String processJobskill(@Valid @ModelAttribute("addjobskill") JobSkills jobSkills,
+                             BindingResult result){
+        if (result.hasErrors()){
+            return "jobdetails";
+        }
+        jobSkillsRepository.save(jobSkills);
+        sitejobs.addJobSkills(jobSkills);
+        siteJobsRepository.save(sitejobs);
+        return "redirect:/addjobskill";
+
+    }
+
+
+    // Organization Methods
+    @GetMapping("/addorg")
+    public String orgForm(Model model){
+        model.addAttribute("orglist", siteOrganizationsRepository.findAll());
+        model.addAttribute("addorg",new SiteOrganizations());
+        return "organizationlist";
+    }
+
+    @PostMapping("/addorg")
+    public String postedOrg(@Valid @ModelAttribute("addorg") Model model){
+        model.addAttribute("orglist", siteOrganizationsRepository.findAll());
+        model.addAttribute("addorg",new SiteOrganizations());
+        return "organizationlist";
+    }
+
+    @PostMapping("/processorg")
+    public String processOrg(@Valid @ModelAttribute("addorg") SiteOrganizations siteOrganizations,
+                             BindingResult result){
+        if (result.hasErrors()){
+            return "organizationlist";
+        }
+        siteOrganizationsRepository.save(siteOrganizations);
+        return "redirect:/addorg";
+
+    }
+
+    @RequestMapping("/orgdetail/{id}")
+    public String orgDetail(@PathVariable("id") long id, Model model){
+        model.addAttribute("orgdetails", siteOrganizationsRepository.findOne(id));
+        return "organizationdetails";
     }
 
 
