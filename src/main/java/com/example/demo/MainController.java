@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @Controller
@@ -567,5 +568,18 @@ public class MainController {
         model.addAttribute("applicants", siteApplicantsRepository.findAll());
         return "resumelist";
     }
+
+
+    // Search Methods
+    @PostMapping("/searchorg")
+    public String showSearchOrgResults(HttpServletRequest request, Model model)
+    {
+        //Get the search string from the result form
+        String searchString = request.getParameter("search");
+        model.addAttribute("search",searchString);
+        model.addAttribute("orglist",siteOrganizationsRepository.findAllByOrganizationNameContainingIgnoreCase(searchString));
+        return "joblist";
+    }
+
 
 }
