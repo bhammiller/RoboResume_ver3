@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="www.thymeleaf.org"
+      xmlns:sec="http://www.tymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <title>Organisation Details</title>
+    <th:block th:replace="/template :: headstuff"></th:block>
+</head>
+<body>
+<div th:replace="/template::navbarfragement">
+</div>
+
+<div class="container-fluid">
+    <div class="container" >
+        <div class="row">
+            <div class="col-6">
+                <table class="table table-striped table-bordered">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>Organisation Details</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Organisation Name </td>
+                        <td th:text="${orgdetail.organizationName}"></td>
+
+                    </tr>
+                    <tr>
+                        <td>Organisation Description</td>
+                        <td th:text="${orgdetail.organizationDescription}"></td>
+                    </tr>
+                    </tbody>
+                </table><br />
+                <div sec:authorize="hasAuthority('RECRUITER')" class="container">
+                    <h2>Add Job</h2>
+                    <form action="#"
+                          th:action="@{/processjob}"
+                          th:object="${addjob}"
+                          method="post">
+                        <input type="hidden" th:field="*{id}" />
+                        <div class="form-group row">
+                            <label for="jobTitle" class="col-sm-2 col-form-label">Job Name </label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" id="jobTitle" th:field="*{jobTitle}" placeholder="Name" />
+                                <small class="form-text text-muted">Required</small>
+                                <span th:if="${#fields.hasErrors('jobTitle')}"
+                                      th:errors="*{jobTitle}" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="jobDescription" class="col-sm-2 col-form-label">Job Description </label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" id="jobDescription" th:field="*{jobDescription}" placeholder="Description" />
+                                <small class="form-text text-muted">Required</small>
+                                <span th:if="${#fields.hasErrors('jobDescription')}"
+                                      th:errors="*{jobDescription}" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-10">
+                                <button type="submit" class="btn btn-primary">Add</button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <br /><br />
+                <table class="table table-striped table-bordered">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>Organisation Jobs</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="siteJobs : ${orgdetail.getSiteJobsOrgList()}">
+                        <td>Job Name </td>
+                        <td><a th:href="@{/jobdetail/{id}(id=${siteJobs.id})}" th:text="${siteJobs.jobTitle}" ></a></td>
+
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        
+        
+    </div>
+</div>
+<th:block th:replace="/template :: jslinks"></th:block>
+</body>
+</html>

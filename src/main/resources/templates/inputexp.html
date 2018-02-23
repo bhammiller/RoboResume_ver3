@@ -69,7 +69,7 @@
         </div>
     </form>
     </div>
-    <div>
+    <div sec:authorize="hasAuthority('APPLICANT')">
         <div class="row" th:each="expResume : ${experience}">
             <div class="col-sm-2">
                 <span th:text="${expResume.jobtitle}"></span><br />

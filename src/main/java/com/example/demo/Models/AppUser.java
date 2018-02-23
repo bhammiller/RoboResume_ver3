@@ -5,6 +5,7 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.List;
@@ -28,7 +29,19 @@ public class AppUser {
     @Email
     private String userEmail;
 
+    @Size(min = 1)
     private String fullName;
+
+    @NotEmpty
+    private String userType;
+
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
+    }
 
     @CreationTimestamp
     Timestamp createdAt;

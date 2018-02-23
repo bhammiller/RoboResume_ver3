@@ -33,7 +33,7 @@
         </div>
     </form>
     </div>
-    <div class="container">
+    <div sec:authorize="hasAuthority('APPLICANT')" class="container">
         <div class="row" th:each="coverLetter : ${covery}">
             <div class="col-sm-2">
                 <span th:text="${coverLetter.coverletter}"></span><br />
@@ -43,6 +43,7 @@
             <div class="col-sm-10"></div>
         </div>
     </div>
+
 </div>
 
 
