@@ -11,11 +11,11 @@
 <div class="container-fluid">
     <h1>Resumes</h1>
     <br />
-    <div class="container" th:each="siteApplicants: ${applicants}">
+    <div class="container" >
     <h1>Resume</h1><br /><br />
     <div class="row">
         <div class="col-sm"><h1>Contact</h1><br />
-            <div class="row" th:each="wholeResume : ${siteApplicants.getWholeResumeList()}">
+            <div class="row" th:each="wholeResume : ${whole}">
                 <div class="col-sm-2">
                     <img  th:src="${wholeResume.youimage}"  alt="Applicant Picture" style="width:200px;height:300px;"/>
                     <span th:text="${wholeResume.name}"></span><br />
@@ -29,7 +29,7 @@
     <div class="row">
         <div class="col-sm"><h1>Education</h1><br />
             <a th:href="@{/addeducation}" class="btn-btn" role="button">Add</a><br /><br />
-            <div class="row" th:each="educationResume : ${siteApplicants.getEducationResumeList()}">
+            <div class="row" th:each="educationResume : ${education}">
                 <div class="col-sm-2">
                     <span th:text="${educationResume.degreetype}"></span> in
                     <span th:text="${educationResume.degreesubject}"></span>,<br />
@@ -45,7 +45,7 @@
     <div class="row">
         <div class="col"><h1>Experience</h1><br />
             <a th:href="@{/addexp}"  class="btn-btn" role="button">Add</a><br /><br />
-            <div class="row" th:each="expResume : ${siteApplicants.getExpResumeList()}">
+            <div class="row" th:each="expResume : ${experience}">
                 <div class="col-sm-2">
                     <span th:text="${expResume.jobtitle}"></span><br />
                     <span th:text="${expResume.employer}"></span>,
@@ -62,7 +62,7 @@
     <div class="row">
         <div class="col"><h1>Skills</h1><br />
             <a th:href="@{/addskills}" class="btn-btn" role="button">Add</a> <br /><br />
-            <div class="row" th:each="skillsResume : ${siteApplicants.getSkillsResumeList()}">
+            <div class="row" th:each="skillsResume : ${skills}">
                 <div class="col-sm-2">
                     <span th:text="${skillsResume.particularskill}"></span>,
                     <span th:text="${skillsResume.skilllevel}"></span><br />

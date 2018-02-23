@@ -417,18 +417,40 @@ public class MainController {
         return "redirect:/addsummary";
     }*/
 
+    // Jobs Methods
+    @GetMapping("/addjob")
+    public String jobForm(Model model){
+
+    }
+
+    @PostMapping("/addjob")
+    public String postedJob(@Valid @ModelAttribute("addjob") Model model){
+
+    }
+
+    @PostMapping("/processjob")
+    public String processJob(@Valid @ModelAttribute("addjob") SiteJobs siteJobs,
+                               BindingResult result){
+
+    }
+
 
     // Completed Resume
     @RequestMapping("/complete")
-    public String listAddresses(Model model/*, Model model1, Model model2, Model model3, Model model4 */, Authentication authentication){
-        /*AppUser user = appUserRepository.findAppUserByAppUsername(authentication.getName());
-        siteApplicants= siteApplicantsRepository.findByAppUserListContaining(user);*/
-        model.addAttribute("applicants", siteApplicantsRepository.findAll());
-        /*model1.addAttribute("whole", siteApplicants.getWholeResumeList());
+    public String listAddresses(Model model1, Model model2, Model model3, Model model4 , Authentication authentication){
+        AppUser user = appUserRepository.findAppUserByAppUsername(authentication.getName());
+        siteApplicants= siteApplicantsRepository.findByAppUserListContaining(user);
+        model1.addAttribute("whole", siteApplicants.getWholeResumeList());
         model2.addAttribute("education", siteApplicants.getEducationResumeList());
         model3.addAttribute("experience", siteApplicants.getExpResumeList());
-        model4.addAttribute("skills", siteApplicants.getSkillsResumeList());*/
+        model4.addAttribute("skills", siteApplicants.getSkillsResumeList());
         return "resumeouput";
+    }
+    // Shows all Applicants Resume
+    @RequestMapping("/rlist")
+    public String listResumes(Model model){
+        model.addAttribute("applicants", siteApplicantsRepository.findAll());
+        return "resumelist";
     }
 
 }
