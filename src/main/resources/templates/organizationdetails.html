@@ -2,7 +2,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="www.thymeleaf.org"
       xmlns:sec="http://www.tymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
-    <title>Organization Details</title>
+    <title>Organisation Details</title>
     <th:block th:replace="/template :: headstuff"></th:block>
 </head>
 <body>
@@ -17,23 +17,23 @@
                     <thead>
                     <tr>
                         <th></th>
-                        <th>Organization Details</th>
+                        <th>Organisation Details</th>
 
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
-                        <td>Organization Name </td>
-                        <td th:text="${siteOrganizations.organizationName}"></td>
+                        <td>Organisation Name </td>
+                        <td th:text="${orgdetail.organizationName}"></td>
 
                     </tr>
                     <tr>
-                        <td>Organization Description</td>
-                        <td th:text="${siteOrganizations.organizationDescription}"></td>
+                        <td>Organisation Description</td>
+                        <td th:text="${orgdetail.organizationDescription}"></td>
                     </tr>
                     </tbody>
                 </table><br />
-                <div sec:authorize="hasAuthority('APPLICANT')" class="container">
+                <div sec:authorize="hasAuthority('RECRUITER')" class="container">
                     <h2>Add Job</h2>
                     <form action="#"
                           th:action="@{/processjob}"
@@ -50,12 +50,12 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="orgDescribtion" class="col-sm-2 col-form-label">Job Description </label>
+                            <label for="jobDescription" class="col-sm-2 col-form-label">Job Description </label>
                             <div class="col-sm-5">
-                                <input type="text" class="form-control" id="orgDescribtion" th:field="*{organizationDescription}" placeholder="Description" />
+                                <input type="text" class="form-control" id="jobDescription" th:field="*{jobDescription}" placeholder="Description" />
                                 <small class="form-text text-muted">Required</small>
-                                <span th:if="${#fields.hasErrors('organizationDescription')}"
-                                      th:errors="*{organizationDescription}" class="text-danger"></span>
+                                <span th:if="${#fields.hasErrors('jobDescription')}"
+                                      th:errors="*{jobDescription}" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -71,14 +71,14 @@
                     <thead>
                     <tr>
                         <th></th>
-                        <th>Organization Jobs</th>
+                        <th>Organisation Jobs</th>
 
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="SiteJobs : ${siteOrganizations.getSiteJobsOrgList()}">
+                    <tr th:each="siteJobs : ${orgdetail.getSiteJobsOrgList()}">
                         <td>Job Name </td>
-                        <td><a th:href="@{/jobdetail/{id}(id=${SiteJobs.id})}" th:text="${siteJobs.jobTitle}" ></a></td>
+                        <td><a th:href="@{/jobdetail/{id}(id=${siteJobs.id})}" th:text="${siteJobs.jobTitle}" ></a></td>
 
                     </tr>
                     </tbody>

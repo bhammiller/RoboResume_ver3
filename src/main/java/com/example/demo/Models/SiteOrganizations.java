@@ -14,7 +14,7 @@ public class SiteOrganizations {
     private String organizationDescription;
 
     //Connections to other Classes
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<SiteJobs> siteJobsOrgList;
 
     public SiteOrganizations(List<SiteJobs> siteJobsOrgList) {

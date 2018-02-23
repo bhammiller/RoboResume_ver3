@@ -83,15 +83,30 @@ public class MainController {
             return "registration";
         }
         else{
-            //Create a new ordinary user
-            model.addAttribute(newUser.getAppUsername()+" created");
-            AppRole r = appRoleRepository.findAppRoleByRoleName("APPLICANT");
-            appUserRepository.save(newUser);
-            newUser.addRole(r);
-            appUserRepository.save(newUser);
-            siteApplicants = new SiteApplicants();
-            siteApplicants.addCredentials(newUser);
-            siteApplicantsRepository.save(siteApplicants);
+
+            if(newUser.getUserType().equals("applicant")) {
+                //Create a new ordinary user
+                model.addAttribute(newUser.getAppUsername() + " created");
+                appUserRepository.save(newUser);
+                AppRole r = appRoleRepository.findAppRoleByRoleName("APPLICANT");
+                newUser.addRole(r);
+                appUserRepository.save(newUser);
+                siteApplicants = new SiteApplicants();
+                siteApplicants.addCredentials(newUser);
+                siteApplicantsRepository.save(siteApplicants);
+            }else if(newUser.getUserType().equals("employer")){
+                model.addAttribute(newUser.getAppUsername() + " created");
+                appUserRepository.save(newUser);
+                AppRole r = appRoleRepository.findAppRoleByRoleName("EMPLOYER");
+                newUser.addRole(r);
+                appUserRepository.save(newUser);
+            }else if(newUser.getUserType().equals("recruiter")){
+                model.addAttribute(newUser.getAppUsername() + " created");
+                appUserRepository.save(newUser);
+                AppRole r = appRoleRepository.findAppRoleByRoleName("RECRUITER");
+                newUser.addRole(r);
+                appUserRepository.save(newUser);
+            }
             return "redirect:/";
         }
     }
@@ -429,16 +444,22 @@ public class MainController {
     }*/
 
     // Jobs Methods
+    @RequestMapping("/joblist")
+    public String listJobs(Model model){
+        model.addAttribute("orglist",siteOrganizationsRepository.findAll());
+        return "joblist";
+    }
+
     @GetMapping("/addjob")
     public String jobForm(Model model){
-        model.addAttribute("orgdetails", siteOrganizations);
+        model.addAttribute("orgdetail", siteOrganizations);
         model.addAttribute("addjob", new SiteJobs());
         return "organizationdetails";
     }
 
     @PostMapping("/addjob")
     public String postedJob(@Valid @ModelAttribute("addjob") Model model){
-        model.addAttribute("orgdetails", siteOrganizations);
+        model.addAttribute("orgdetail", siteOrganizations);
         model.addAttribute("addjob", new SiteJobs());
         return "organizationdetails";
     }
@@ -458,15 +479,15 @@ public class MainController {
 
     @RequestMapping("/jobdetail/{id}")
     public String jobDetail(@PathVariable("id") long id, Model model){
-        model.addAttribute("jobdetails", siteJobsRepository.findOne(id));
+        model.addAttribute("siteJobs", siteJobsRepository.findOne(id));
         sitejobs=siteJobsRepository.findOne(id);
-        return "jobdetails";
+        return "redirect:/addjobskill";
     }
 
     // JobSkills Methods
     @GetMapping("/addjobskill")
     public String jobskillForm(Model model){
-        model.addAttribute("jobdeatails", sitejobs);
+        model.addAttribute("siteJobs", sitejobs);
         model.addAttribute("addjobskill", new JobSkills());
         return "jobdetails";
 
@@ -474,7 +495,7 @@ public class MainController {
 
     @PostMapping("/addjobskill")
     public String postedJobskill(@Valid @ModelAttribute("addjobskill") Model model){
-        model.addAttribute("jobdeatails", sitejobs);
+        model.addAttribute("siteJobs", sitejobs);
         model.addAttribute("addjobskill", new JobSkills());
         return "jobdetails";
 
@@ -522,21 +543,22 @@ public class MainController {
 
     @RequestMapping("/orgdetail/{id}")
     public String orgDetail(@PathVariable("id") long id, Model model){
-        model.addAttribute("orgdetails", siteOrganizationsRepository.findOne(id));
+        model.addAttribute("orgdetail", siteOrganizationsRepository.findOne(id));
         siteOrganizations=siteOrganizationsRepository.findOne(id);
-        return "organizationdetails";
+        return "redirect:/addjob";
     }
 
 
     // Completed Resume
     @RequestMapping("/complete")
-    public String listAddresses(Model model1, Model model2, Model model3, Model model4 , Authentication authentication){
+    public String listAddresses(Model model1, Model model2, Model model3, Model model4, Model model5 , Authentication authentication){
         AppUser user = appUserRepository.findAppUserByAppUsername(authentication.getName());
         siteApplicants= siteApplicantsRepository.findByAppUserListContaining(user);
         model1.addAttribute("whole", siteApplicants.getWholeResumeList());
         model2.addAttribute("education", siteApplicants.getEducationResumeList());
         model3.addAttribute("experience", siteApplicants.getExpResumeList());
         model4.addAttribute("skills", siteApplicants.getSkillsResumeList());
+        model5.addAttribute("summery",siteApplicants.getSummaryResumeList());
         return "resumeouput";
     }
     // Shows all Applicants Resume

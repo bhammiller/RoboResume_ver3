@@ -33,7 +33,7 @@
         </div>
     </form>
     </div>
-    <div class="container">
+    <div sec:authorize="hasAuthority('APPLICANT')" class="container">
         <div class="row" th:each="summaryResume : ${summery}">
             <div class="col-sm-2">
                 <span th:text="${wholeResume.yousummary}"></span><br />

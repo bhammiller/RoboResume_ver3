@@ -8,7 +8,7 @@
 <body>
 <div th:replace="/template::navbarfragement"></div>
 
-<div class="container-fluid">
+<div sec:authorize="hasAuthority('APPLICANT')" class="container-fluid">
     <h1>Resumes</h1>
     <br />
     <div class="container" >
@@ -26,6 +26,16 @@
             </div>
         </div>
     </div>
+        <div class="container">
+            <div class="row" th:each="summaryResume : ${summery}">
+                <div class="col-sm-2">
+                    <span th:text="${wholeResume.yousummary}"></span><br />
+                    <a type="button" th:href="@{/updatesummary/{id}(id=${summaryResume.id})}" class="btn btn-dark" role="button">Update</a>
+                    <!--<a type="button" th:href="@{/deletesummary/{id}(id=${summaryResume.id})}" class="btn btn-dark" role="button">Delete</a><br /><br />-->
+                </div>
+                <div class="col-sm-10"></div>
+            </div>
+        </div>
     <div class="row">
         <div class="col-sm"><h1>Education</h1><br />
             <a th:href="@{/addeducation}" class="btn-btn" role="button">Add</a><br /><br />

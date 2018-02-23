@@ -16,7 +16,7 @@ public class SiteJobs {
     private String jobSalaryRange;
 
     //Connections to other Classes
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<JobSkills> jobSkillsList;
 
     public SiteJobs(List<JobSkills> jobSkillsList) {

@@ -29,11 +29,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
         http
 
                 .authorizeRequests()
-                .antMatchers("/","/register","/contact","/css/**","/js/**","/addeducation","/addexp","/addskills","/addcover","/addsummary","/complete").permitAll()
+                .antMatchers("/","/register","/contact","/css/**","/js/**","/addcover","/rlist","/addorg","/processorg","/orgdetail/{id}",
+                        "/addjobskill","/processjobskill","/jobdetail/{id}","/processjob","/addjob","/joblist").permitAll()
                 .antMatchers("/h2-console/**","/updatecontact/{id}","/process","/processeducation","/updateeducation/{id}",
                         "/deleteeducation/{id}","/processexp","/updateexp/{id}","/deleteexp/{id}","/processskill",
                         "/updateskill/{id}","/deleteskill/{id}","/processreferals","/updateref/{id}","/deleteref/{id}","/processcover",
-                        "/addreferals","/updatecover/{id}","/deletecover/{id}","/processsummary","/updatesummary/{id}","/deletesummary/{id}").hasAuthority("APPLICANT")
+                        "/addreferals","/updatecover/{id}","/deletecover/{id}","/processsummary","/updatesummary/{id}",
+                        "/deletesummary/{id}","/addeducation","/addexp","/addskills","/addsummary","/complete"
+                        ).hasAuthority("APPLICANT")
                 .anyRequest().authenticated();
 
         http
@@ -48,7 +51,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser("user").password("password").roles("USER");
         auth.userDetailsService(userDetailsServiceBean());
     }
 }

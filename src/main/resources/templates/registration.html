@@ -14,7 +14,7 @@
           th:object="${newUser}" method="post">
         Full Name <mark><strong>
         <span th:if="${#fields.hasErrors('fullName')}"
-              th:errors="*{fullName}">Last Name Error</span>
+              th:errors="*{fullName}">Full Name Error</span>
     </strong></mark>
         <input type="text" id="fullName" placeholder="Last Name"
                th:field="*{fullName}" /><br />
@@ -39,6 +39,16 @@
     </strong></mark>
         <input type="text" id="password" placeholder="Password"
                th:field="*{appPassword}" /><br />
+        <h2>Current Status</h2>
+        <div class="radio">
+            <label><input type="radio" th:field="*{userType}" value="applicant" name="optradio1"/>Applicant</label>
+        </div>
+        <div class="radio">
+            <label><input type="radio" th:field="*{userType}" value="employer" name="optradio2"/>Employer</label>
+        </div>
+        <div class="radio ">
+            <label><input type="radio" th:field="*{userType}" value="recruiter" name="optradio3" />Recruiter</label>
+        </div>
         <button type="submit" value="Register" class="btn btn-default">Submit</button>
     </form>
 </div>

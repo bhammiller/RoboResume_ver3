@@ -18,15 +18,15 @@
             <table class="table table-striped table-bordered">
                 <thead>
                 <tr>
-                    <th>Organization Name</th>
+                    <th>Organisation Name</th>
                     <th>Job Name Name</th>
                 </tr>
                 </thead>
                 <tbody th:each="siteOrganizations : ${orglist}">
-                <tr th:each="SiteJobs : ${}">
-                    <td><a th:href="@{/orgdetail/{id}(id=${SiteOrganizations.id})}" th:text="${siteOrganizations.organizationName}" ></a></td>
-                    <td th:each="SiteJobs : ${siteOrganizations.getSiteJobsOrgList()}">
-                        <a th:href="@{/jobdetail/{id}(id=${SiteJobs.id})}" th:text="${siteJobs.jobTitle}" ></a>
+                <tr th:each="siteJobs : ${siteOrganizations.getSiteJobsOrgList()}">
+                    <td><a th:href="@{/orgdetail/{id}(id=${siteOrganizations.id})}" th:text="${siteOrganizations.organizationName}" ></a></td>
+                    <td th:each="siteJobs : ${siteOrganizations.getSiteJobsOrgList()}">
+                        <a th:href="@{/jobdetail/{id}(id=${siteJobs.id})}" th:text="${siteJobs.jobTitle}" ></a>
                     </td>
                 </tr>
                 </tbody>
