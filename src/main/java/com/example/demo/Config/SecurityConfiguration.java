@@ -30,7 +30,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 
                 .authorizeRequests()
                 .antMatchers("/","/register","/contact","/css/**","/js/**","/addcover","/rlist","/addorg","/processorg","/orgdetail/{id}",
-                        "/addjobskill","/processjobskill","/jobdetail/{id}","/processjob","/addjob","/joblist").permitAll()
+                        "/addjobskill","/processjobskill","/jobdetail/{id}","/processjob","/addjob","/joblist","/2.jpg").permitAll()
                 .antMatchers("/h2-console/**","/updatecontact/{id}","/process","/processeducation","/updateeducation/{id}",
                         "/deleteeducation/{id}","/processexp","/updateexp/{id}","/deleteexp/{id}","/processskill",
                         "/updateskill/{id}","/deleteskill/{id}","/processreferals","/updateref/{id}","/deleteref/{id}","/processcover",
