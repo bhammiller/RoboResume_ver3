@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -128,6 +129,7 @@ public class MainController {
             siteApplicants =siteApplicantsRepository.findByAppUserListContaining(user);
             List<SkillsResume> skillsResumes1= siteApplicants.getSkillsResumeList();
             Integer x;
+            ArrayList<SiteJobs> siteJobs2= new ArrayList<>();
             for(SiteJobs siteJobs1 : siteJobsRepository.findAll()) {
                 x=0;
                 for (JobSkills jobSkills1 : siteJobs1.getJobSkillsList()) {
@@ -135,7 +137,7 @@ public class MainController {
                         for (SkillsResume skillsResumes2 : skillsResumes1) {
                             String personskill = skillsResumes2.getParticularskill();
                             if (jobSkills1.getJobSkillName().equalsIgnoreCase(personskill)) {
-                                siteJobsRepository1.save(siteJobs1);
+                                siteJobs2.add(siteJobs1);
                                 x=1;
                             }
 
@@ -143,9 +145,9 @@ public class MainController {
                     }
                 }
             }
-            model.addAttribute("userjobs", siteJobsRepository1);
+            model.addAttribute("userjobs", siteJobs2);
         }
-        
+
         return "homepage";
     }
 
