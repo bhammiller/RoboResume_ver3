@@ -124,6 +124,7 @@ public class MainController {
     public String resumeLoggedIn(Model model, Authentication authentication){
         AppUser user = appUserRepository.findAppUserByAppUsername(authentication.getName());
         if(user.getUserType().equals("APPLICANT")){
+            SiteJobsRepository siteJobsRepository1;
             siteApplicants =siteApplicantsRepository.findByAppUserListContaining(user);
             List<SkillsResume> skillsResumes1= siteApplicants.getSkillsResumeList();
             Integer x;
@@ -133,8 +134,8 @@ public class MainController {
                     if (x == 0) {
                         for (SkillsResume skillsResumes2 : skillsResumes1) {
                             String personskill = skillsResumes2.getParticularskill();
-                            if (jobSkills1.getJobSkillName().equals(personskill)) {
-                                model.addAttribute("userjobs", siteJobs1);
+                            if (jobSkills1.getJobSkillName().equalsIgnoreCase(personskill)) {
+                                siteJobsRepository1.save(siteJobs1);
                                 x=1;
                             }
 
@@ -142,8 +143,9 @@ public class MainController {
                     }
                 }
             }
-
+            model.addAttribute("userjobs", siteJobsRepository1);
         }
+        
         return "homepage";
     }
 
