@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 public class MainController {
@@ -115,7 +116,34 @@ public class MainController {
 
     // Homepage Methods
     @GetMapping("/")
-    public String resumeStarter(){
+    public String resumeStarter(Model model, Authentication authentication){
+        return "homepage";
+    }
+
+    @GetMapping("/loggedin")
+    public String resumeLoggedIn(Model model, Authentication authentication){
+        AppUser user = appUserRepository.findAppUserByAppUsername(authentication.getName());
+        if(user.getUserType().equals("APPLICANT")){
+            siteApplicants =siteApplicantsRepository.findByAppUserListContaining(user);
+            List<SkillsResume> skillsResumes1= siteApplicants.getSkillsResumeList();
+            Integer x;
+            for(SiteJobs siteJobs1 : siteJobsRepository.findAll()) {
+                x=0;
+                for (JobSkills jobSkills1 : siteJobs1.getJobSkillsList()) {
+                    if (x != 0) {
+                        for (SkillsResume skillsResumes2 : skillsResumes1) {
+                            String personskill = skillsResumes2.getParticularskill();
+                            if (jobSkills1.getJobSkillName().equals(personskill)) {
+                                model.addAttribute("userjobs", siteJobs1);
+                                x=1;
+                            }
+
+                        }
+                    }
+                }
+            }
+
+        }
         return "homepage";
     }
 
