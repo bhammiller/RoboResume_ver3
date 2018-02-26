@@ -130,7 +130,7 @@ public class MainController {
             for(SiteJobs siteJobs1 : siteJobsRepository.findAll()) {
                 x=0;
                 for (JobSkills jobSkills1 : siteJobs1.getJobSkillsList()) {
-                    if (x != 0) {
+                    if (x == 0) {
                         for (SkillsResume skillsResumes2 : skillsResumes1) {
                             String personskill = skillsResumes2.getParticularskill();
                             if (jobSkills1.getJobSkillName().equals(personskill)) {
